@@ -6,10 +6,10 @@ spring:
     mcp:
       server:
         name: miro-mcp-server
-        version: 1.0.0
+        version: 1.0
 
 logging:
   pattern:
     console:
   file:
-    name: './miro-mcp-server.log' # лог будем писать в отдельный файл
+    name: './miro-mcp-server.log'

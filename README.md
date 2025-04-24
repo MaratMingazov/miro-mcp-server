@@ -1,5 +1,8 @@
 # Miro MCP Server
 
+[![Watch the demo](https://img.youtube.com/vi/QB_gG3kIwQc/maxresdefault.jpg)](https://www.youtube.com/watch?v=QB_gG3kIwQc)
+
+
 ## Overview
 
 **Miro MCP Server** is an implementation of the [Model Context Protocol (MCP)](https://modelcontextprotocol.io/introduction) that integrates with [Miro's REST API](https://developers.miro.com/docs/miro-rest-api-introduction). It enables AI systems to collaborate with users directly on Miro boards by interacting with board widgets. This server provides tools that AI models can use to build visual diagrams and perform real-time collaboration.
@@ -40,7 +43,7 @@ Add the following configuration to your file:
 ```json
 {
   "mcpServers": {
-    "Miro-mcp-server": {
+    "miro-mcp-server": {
       "command": "java",
       "args": [
         "-jar",

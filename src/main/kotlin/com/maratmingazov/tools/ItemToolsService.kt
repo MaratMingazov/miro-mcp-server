@@ -11,13 +11,50 @@ class ItemToolsService(
     private val miroClient: RestClient,
 ) {
 
-    @Tool(name = "getWidgets", description = "get the widgets on a miro board")
+    @Tool(name = "getWidgets", description = Descriptions.TOOL_GET_WIDGETS)
     fun getWidgets(
-        @ToolParam(description = "Miro board key to get widgets", required = true) boardKey: String,
+        @ToolParam(description = Descriptions.PARAM_BOARD_KEY, required = true) boardKey: String,
+        @ToolParam(description = Descriptions.PARAM_LIMIT, required = true) limit: String = "10",
+        @ToolParam(description = Descriptions.PARAM_CURSOR, required = false) cursor: String? = null,
     ) : ResponseEntity<String> {
+        val uriBuilder = StringBuilder("/boards/$boardKey/items?limit=$limit")
+        if (!cursor.isNullOrBlank()) {
+            uriBuilder.append("&cursor=$cursor")
+        }
+
         return miroClient.get()
-            .uri("/boards/$boardKey/items")
+            .uri(uriBuilder.toString())
             .retrieve()
             .toEntity(String::class.java)
     }
+}
+
+object Descriptions {
+    const val TOOL_GET_WIDGETS = """
+        Retrieves a list of items for a specific board. 
+        You can retrieve all items on the board, a list of child items inside a parent item, or a list of specific types of items by specifying URL query parameter values. 
+        This method returns results using a cursor-based approach. 
+        A cursor-paginated method returns a portion of the total set of results based on the limit specified and a cursor that points to the next portion of the results. 
+        To retrieve the next portion of the collection, on your next call to the same method, set the cursor parameter equal to the cursor value you received in the response of the previous request. 
+        For example, if you set the limit query parameter to 10 and the board contains 20 objects, the first call will return information about the first 10 objects in the response along with a cursor parameter and value. 
+        In this example, let's say the cursor parameter value returned in the response is foo. 
+        If you want to retrieve the next set of objects, on your next call to the same method, set the cursor parameter value to foo. 
+    """
+
+    const val PARAM_BOARD_KEY = """
+        Unique identifier (ID) of the board for which you want to retrieve the list of available items. 
+    """
+
+    const val PARAM_LIMIT = """
+        The maximum number of results to return per call. 
+        If the number of items in the response is greater than the limit specified, the response returns the cursor parameter with a value. 
+        MIN VALUE = 10. 
+        MAX VALUE = 50. 
+        DEFAULT VALUE = 10. 
+    """
+
+    const val PARAM_CURSOR = """
+        A cursor-paginated method returns a portion of the total set of results based on the limit specified and a cursor that points to the next portion of the results. 
+        To retrieve the next portion of the collection, set the cursor parameter equal to the cursor value you received in the response of the previous request. 
+    """
 }

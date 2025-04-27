@@ -11,12 +11,12 @@ class ItemToolsService(
     private val miroClient: RestClient,
 ) {
 
-    @Tool(name = "getWidgets", description = Descriptions.TOOL_GET_WIDGETS)
-    fun getWidgets(
+    @Tool(name = "getItems", description = Descriptions.TOOL_GET_ITEMS)
+    fun getItems(
         @ToolParam(description = Descriptions.PARAM_BOARD_KEY, required = true) boardKey: String,
         @ToolParam(description = Descriptions.PARAM_LIMIT, required = true) limit: String = "10",
         @ToolParam(description = Descriptions.PARAM_CURSOR, required = false) cursor: String? = null,
-    ) : ResponseEntity<String> {
+    ): ResponseEntity<String> {
         val uriBuilder = StringBuilder("/boards/$boardKey/items?limit=$limit")
         if (!cursor.isNullOrBlank()) {
             uriBuilder.append("&cursor=$cursor")
@@ -27,10 +27,22 @@ class ItemToolsService(
             .retrieve()
             .toEntity(String::class.java)
     }
+
+    @Tool(name = "getItem", description = Descriptions.TOOL_GET_ITEM)
+    fun getItem(
+        @ToolParam(description = Descriptions.PARAM_BOARD_KEY, required = true) boardKey: String,
+        @ToolParam(description = Descriptions.PARAM_ITEM_ID, required = true) itemId: String,
+    ): ResponseEntity<String> {
+        return miroClient.get()
+            .uri("/boards/$boardKey/items/$itemId")
+            .retrieve()
+            .toEntity(String::class.java)
+    }
+
 }
 
 object Descriptions {
-    const val TOOL_GET_WIDGETS = """
+    const val TOOL_GET_ITEMS = """
         Retrieves a list of items for a specific board. 
         You can retrieve all items on the board, a list of child items inside a parent item, or a list of specific types of items by specifying URL query parameter values. 
         This method returns results using a cursor-based approach. 
@@ -41,9 +53,11 @@ object Descriptions {
         If you want to retrieve the next set of objects, on your next call to the same method, set the cursor parameter value to foo. 
     """
 
-    const val PARAM_BOARD_KEY = """
-        Unique identifier (ID) of the board for which you want to retrieve the list of available items. 
-    """
+    const val TOOL_GET_ITEM = """Retrieves information for a specific item on a board."""
+
+    const val PARAM_BOARD_KEY = """Unique identifier (ID) of the board for which you want to retrieve the list of available items. """
+
+    const val PARAM_ITEM_ID = """Unique identifier (ID) of the item that you want to retrieve."""
 
     const val PARAM_LIMIT = """
         The maximum number of results to return per call. 

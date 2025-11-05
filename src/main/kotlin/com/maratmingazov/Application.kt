@@ -36,6 +36,10 @@ fun main(args: Array<String>) {
 
 @Configuration
 class MiroConfig(
+    /**
+     * Spring Boot обрабатывает аргументы командой строки и положит сюда значение токена
+     * Другой способ, можно передать этот аргумент через application.yml : token: your_token_here
+     */
     @Value("\${token}") private val token: String
 ) {
 

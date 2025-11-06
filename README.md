@@ -17,6 +17,25 @@
 
 You can either download a precompiled JAR file from the [Releases](https://github.com/MaratMingazov/miro-mcp-server/releases) page or build the project yourself.
 
+### Option 0: Use public docker image
+Add the following configuration to your file:
+```json
+{
+  "mcpServers": {
+    "miro-mcp-server": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e", "MIRO_TOKEN=your_miro_token_here",
+        "maratmingazovr/miro-mcp-server:1.0"
+      ]
+    }
+  }
+}
+```
+
 ### Option 1: Use prebuilt JAR
 
 1. Download the latest release from the [Releases](https://github.com/MaratMingazov/miro-mcp-server/releases) page.
@@ -48,7 +67,7 @@ Add the following configuration to your file:
       "args": [
         "-jar",
         "/path/to/miro-mcp-server-1.0.jar",
-        "--token=miroToken"
+        "--MIRO_TOKEN=miroToken"
       ]
     }
   }
